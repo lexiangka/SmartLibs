@@ -223,9 +223,14 @@ public final class AppUtil {
      *
      * @param packageName 应用程序包名
      */
-    public static void launchApp(@NonNull String packageName) {
-        Intent intent = SUtils.getApp().getPackageManager().getLaunchIntentForPackage(packageName);
-        SUtils.getApp().startActivity(intent);
+    public static void launchApp(@NonNull String packageName) throws Exception {
+        PackageManager packageManager = SUtils.getApp().getPackageManager();
+        Intent intent = packageManager.getLaunchIntentForPackage(packageName);
+        if (intent != null) {
+            SUtils.getApp().startActivity(intent);
+        } else {
+            throw new Exception(packageName + "not found.");
+        }
     }
 
     /**
