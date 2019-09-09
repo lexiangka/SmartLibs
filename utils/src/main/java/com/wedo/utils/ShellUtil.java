@@ -150,6 +150,11 @@ public final class ShellUtil {
         );
     }
 
+    public static void Reboot() {
+        String[] cmd = new String[]{"/system/xbin/su", "-c", "reboot now"};
+        execCmd(cmd, true);
+    }
+
     /**
      * 返回的命令结果
      */
