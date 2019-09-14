@@ -1,10 +1,8 @@
 package com.wedo.utils;
 
-
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -19,6 +17,9 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
+
+import com.jaredrummler.android.processes.AndroidProcesses;
+import com.jaredrummler.android.processes.models.AndroidAppProcess;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -38,15 +39,6 @@ import java.util.Locale;
  */
 public final class AppUtil {
     private static final String TAG = AppUtil.class.getSimpleName();
-    /**
-     * App 的运行状态
-     */
-    /* App 运行在前台 */
-    public static final int APP_FORE = 1;
-    /* App 运行在后台 */
-    public static final int APP_BACK = 2;
-    /* App 已经被杀死 */
-    public static final int APP_DEAD = 3;
 
     private AppUtil() {
         throw new UnsupportedOperationException("cannot be instantiated");
@@ -59,42 +51,13 @@ public final class AppUtil {
      * @return {@code true}: 依然存活<br>{@code false}: 已被杀死
      */
     public static boolean isAppAlive(@NonNull String packageName) {
-        ActivityManager activityManager = (ActivityManager) SUtils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningAppProcessInfo> processInfos = activityManager.getRunningAppProcesses();
-        for (int i = 0; i < processInfos.size(); i++) {
-            if (processInfos.get(i).processName.equals(packageName)) {
-                Log.i(TAG, String.format("AppAliveInfo ========> App %s is running", packageName));
+        List<AndroidAppProcess> processes = AndroidProcesses.getRunningAppProcesses();
+        for (AndroidAppProcess process : processes) {
+            if (process.getPackageName().equalsIgnoreCase(packageName)) {
                 return true;
             }
         }
-        Log.i(TAG, String.format("AppAliveInfo ========> App %s has been killed", packageName));
         return false;
-    }
-
-    /**
-     * 获取 App 的状态
-     *
-     * @param packageName 应用程序包名
-     * @return {@link #APP_FORE}: 运行在前台<br>{@link #APP_BACK}: 运行在后台<br>{@link #APP_DEAD}: 已被杀死
-     */
-    public static int getAppStatus(@NonNull String packageName) {
-        ActivityManager am = (ActivityManager) SUtils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
-        List<ActivityManager.RunningTaskInfo> taskInfos = am.getRunningTasks(20);
-        // 判断 App 是否在栈顶
-        if (taskInfos.get(0).topActivity.getPackageName().equals(packageName)) {
-            Log.i(TAG, String.format("AppStatusInfo ========> App %s is running onForeground", packageName));
-            return APP_FORE;
-        } else {
-            // 判断 App 是否在堆栈中
-            for (ActivityManager.RunningTaskInfo info : taskInfos) {
-                if (info.topActivity.getPackageName().equals(packageName)) {
-                    Log.i(TAG, String.format("AppStatusInfo ========> App %s is running onBackground", packageName));
-                    return APP_BACK;
-                }
-            }
-            Log.i(TAG, String.format("AppStatusInfo ========> App %s has been killed", packageName));
-            return APP_DEAD;
-        }
     }
 
     /**
