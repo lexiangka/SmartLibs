@@ -77,7 +77,7 @@ public final class AppUtil {
      * @param packageName 应用程序包名
      * @return {@link #APP_FORE}: 运行在前台<br>{@link #APP_BACK}: 运行在后台<br>{@link #APP_DEAD}: 已被杀死
      */
-    public int getAppStatus(@NonNull String packageName) {
+    public static int getAppStatus(@NonNull String packageName) {
         ActivityManager am = (ActivityManager) SUtils.getApp().getSystemService(Context.ACTIVITY_SERVICE);
         List<ActivityManager.RunningTaskInfo> taskInfos = am.getRunningTasks(20);
         // 判断 App 是否在栈顶
