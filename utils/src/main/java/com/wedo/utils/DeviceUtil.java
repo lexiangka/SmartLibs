@@ -60,12 +60,16 @@ public final class DeviceUtil {
         return false;
     }
 
+    public static String getID(){
+        return getUuid().toString();
+    }
+
     /**
      * 获取设备的唯一标识
      *
      * @return uuid
      */
-    public static UUID getDeviceUuid() {
+    public static UUID getUuid() {
         UUID uuid;
         // 先从指定文件中获取事先存储的 uuid
         final SharedPreferences prefs = SUtils.getApp().getSharedPreferences(PREFS_FILE, 0);

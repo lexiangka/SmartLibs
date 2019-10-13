@@ -3,7 +3,6 @@ package com.wedo.utils;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
@@ -17,10 +16,8 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.FileProvider;
-
 import com.jaredrummler.android.processes.AndroidProcesses;
 import com.jaredrummler.android.processes.models.AndroidAppProcess;
-
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
